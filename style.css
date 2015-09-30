@@ -1,0 +1,146 @@
+.icon {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+    vertical-align: middle;
+    background: no-repeat center;
+    background-size: contain;
+}
+
+.icon-bankcard {
+    background-image: url("imgs/icon-bankcard.png");
+}
+
+.icon-list {
+    background-image: url("imgs/icon-list.png");
+}
+
+.supposed {
+    width: 20px;
+    border: solid 20px transparent;
+    position: absolute;
+    right: 0;
+}
+
+#info .amount-board {
+    background-color: rgb(255, 101, 0);
+    width: 100%;
+    text-align: center;
+    padding: 40px 0;
+    color: white;
+}
+
+#info .amount-board h1 {
+    font-size: 80rem;
+}
+
+#info .amount-board p {
+    font-size: 24rem;
+}
+
+#info .row {
+    font-size: 28rem;
+    background: white;
+    margin-top: 8px;
+    padding: 10px;
+    color: #797979;
+}
+
+#info .row::before {
+    content: '';
+    position: absolute;
+    background: url("imgs/rightArrow.png") no-repeat center;
+    background-size: 35%;
+    right: 0;
+    width: 15px;
+    height: 15px;
+    display: block;
+    margin: 4px 15px;
+}
+
+#info .tip {
+    font-size: 24rem;
+    color: #aaa;
+    margin: 15px;
+}
+
+#details .tip {
+    padding: 10px 0;
+    font-size: 28rem;
+    color: #888888;
+    text-align: center;
+}
+
+.bank-CMBCCNBS {
+    background-image: url(imgs/bank/CMBCCNBS.png);
+}
+
+.bank-ICBKCNBJ {
+    background-image: url(imgs/bank/ICBKCNBJ.png);
+}
+
+.bank-PCBCCNBJ {
+    background-image: url(imgs/bank/PCBCCNBJ.png);
+}
+
+.bank-SPDBCNSH {
+    background-image: url(imgs/bank/SPDBCNSH.png);
+}
+
+.bank-ABOCCNBJ {
+    background-image: url(imgs/bank/ABOCCNBJ.png);
+}
+
+/*'CMBCCNBS'=>1001, //招商银行*/
+/*'ICBKCNBJ'=>1002, //工商银行*/
+/*'PCBCCNBJ'=>1003, //建设银行*/
+/*'SPDBCNSH'=>1004, //上海浦东发展银行*/
+/*'ABOCCNBJ'=>1005, //农业银行*/
+
+.bank-FJIBCNBA {
+    background-image: url(imgs/bank/FJIBCNBA.png);
+}
+
+.bank-BJCNCNBJ {
+    background-image: url(imgs/bank/BJCNCNBJ.png);
+}
+
+.bank-EVERCNBJ {
+    background-image: url(imgs/bank/EVERCNBJ.png);
+}
+
+.bank-MSBCCNBJ {
+    background-image: url(imgs/bank/MSBCCNBJ.png);
+}
+
+.bank-SZCBCNBS {
+    background-image: url(imgs/bank/SZCBCNBS.png);
+}
+
+/*'FJIBCNBA'=>1009, //兴业银行*/
+/*'BJCNCNBJ'=>1032, //北京银行*/
+/*'EVERCNBJ'=>1022, //光大银行*/
+/*'MSBCCNBJ'=>1006, //民生银行*/
+/*'SZCBCNBS'=>1010, //平安银行*/
+
+.bank-SZDBCNBS {
+    background-image: url(imgs/bank/SZDBCNBS.png);
+}
+
+.bank-COMMCNSH {
+    background-image: url(imgs/bank/COMMCNSH.png);
+}
+
+.bank-CIBKCNBJ {
+    background-image: url(imgs/bank/CIBKCNBJ.png);
+}
+
+.bank-GDBKCN22 {
+    background-image: url(imgs/bank/GDBKCN22.png);
+}
+
+/*'SZDBCNBS'=>1010, //深圳银行*/
+/*'COMMCNSH'=>1020, //交通银行*/
+/*'CIBKCNBJ'=>1021, //中信银行*/
+/*'GDBKCN22'=>1027, //广发银行*/

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title></title>
+    <meta name="viewport"
+          content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <script src="include/dev.min.js"></script>
+    <script src="main.js"></script>
+    <link href="universe.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+    <style>
+        #loading {
+            width: 100%;
+            height: 100%;
+            top: 0;
+            background: white;
+            text-align: center;
+            position: fixed;
+            z-index: 9999;
+        }
+
+        #loading img {
+            margin-top: 200px;
+        }
+    </style>
+</head>
+<body>
+
+<div id="loading">
+    <span><img src="imgs/loading.gif"/></span>
+</div>
+
+<div id="main">
+
+</div>
+
+<script id="info" type="text/template" class="template">
+    <!--<img src="imgs/icon-supposed.png" class="supposed"/>-->
+    <div class="amount-board">
+        <h1>${accountAmount}.00</h1>
+
+        <p>账户余额(元)</p>
+    </div>
+    <div>
+        <div class="row">
+            <i class="icon icon-bankcard"></i>银行卡绑定
+        </div>
+        <div class="row">
+            <i class="icon icon-list"></i>账户明细
+        </div>
+    </div>
+    <p class="tip">注：余额将自动打入您指定账户中，请耐心等待</p>
+</script>
+
+<script id="details" type="text/template" class="template">
+    <div id="list"></div>
+    <div class="tip">加载中...</div>
+</script>
+
+<script id="detailsRow" type="text/template" class="template">
+    <div class="row">
+
+        <div>入账金额</div>
+        $${amount|formatAmount,type}
+
+        <div>类型</div>
+        {@if type}
+        <p>收入</p>
+        {@else}
+        <p>提款</p>
+        {@/if}
+
+        <div>提款日期</div>
+        <p>${creatTime|formatTime}</p>
+
+    </div>
+</script>
+
+<script id="mycard" type="text/template" class="template">
+    <div>
+        <div>
+            <${'img'} src='imgs/bank/${bank}.png'/>
+        </div>
+        <div>
+            <p>${name}</p>
+
+            <p>${bank,formatBank}</p>
+
+            <p>${cardNum.substr(4)}</p>
+        </div>
+        <${'img'} src='${bank}'/>
+    </div>
+    <div>
+        <i class="icon icon-switch"></i>
+        更换银行卡
+    </div>
+</script>
+
+<script id="binding" type="text/template" class="template">
+
+    <p>请填写银行卡信息，用于收取定金</p>
+    <div><span class="input-placeholder">选择银行</span></div>
+    <ul>
+        {@each 银行列表 as el}
+        <li><i class="icon icon-${银行代码}"></i>${银行代码->银行名}</li>
+        ｛@/each}
+    </ul>
+    <div>
+        <input type="tel" maxlength="22" placeholder="输入银行卡号"/>
+    </div>
+    <div>
+        <input type="text" maxlength="8" placeholder="输入姓名"/>
+    </div>
+
+    <p>注意</p>
+    <p>1.银行卡开户人信息必须用填写的姓名一致，才能提现。</p>
+    <p>2.开户银行、卡号必须准确无误，否则无法提现。</p>
+    <p>3.银行卡仅支持储蓄卡，请不要填写信用卡。</p>
+    <p>4.绑定62开头，有银联标识的储蓄卡，提现更及时。</p>
+
+    <div>完成</div>
+</script>
+
+</body>
+</html>
