@@ -5,6 +5,11 @@ var g$sid = '这是一个获取SessionId';//获取SessionId
 var UserInfo = {};
 //var g$sid = location.search.substr(1).match(/_id=([^\b&]*)/)[1];//获取店铺id
 
+tatoo.get('SessionId', function (obj) {
+    console.dir(obj);
+    g$sid = obj;
+});
+
 window.addEventListener('load', function () {
     FastClick.attach(document.body);
 }, false);
@@ -49,19 +54,28 @@ var bank = {
         'SPDBCNSH': '上海浦东发展银行',
         'ABOCCNBJ': '农业银行',
 
-        'FJIBCNBA': '兴业银行',
-        'BJCNCNBJ': '北京银行',
-        'EVERCNBJ': '光大银行',
+        //'FJIBCNBA': '兴业银行',
+        //'BJCNCNBJ': '北京银行',
+        //'EVERCNBJ': '光大银行',
         'MSBCCNBJ': '民生银行',
         'SZCBCNBS': '平安银行',
 
         'COMMCNSH': '深圳银行',
         'SZDBCNBS': '交通银行',
-        'CIBKCNBJ': '中信银行',
-        'GDBKCN22': '广发银行'
+        'CIBKCNBJ': '中信银行'
+        //'GDBKCN22': '广发银行'
+    },
+    getlist: function () {
+        var array = [];
+        for (var i in bank.bankList) {
+            array.push({
+                code: i,
+                name: bank.bankList[i]
+            })
+        }
+        return array;
     }
 };
-xxx
 
 var template = {
     render: function (page, data) {
@@ -98,9 +112,7 @@ $(document).ready(function () {
                     "info": page.info.init,
                     "details": page.details.init,
                     "mycard": page.mycard.init,
-                    "binding": function () {
-                        console.log('binding')
-                    },
+                    "binding": page.binding.init,
                     "*": function () {
                         location.hash = '#info'
                     }
@@ -114,6 +126,7 @@ $(document).ready(function () {
 });
 
 var page = {
+    isLoading: false,
     info: {
         init: function () {
             document.title = '账户';
@@ -125,7 +138,7 @@ var page = {
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
-                    console.dir(obj);
+                    //console.dir(obj);
 
                     if (!obj.code) {
                         var data = obj.data;
@@ -222,9 +235,95 @@ var page = {
     mycard: {
         init: function () {
             document.title = '我的银行卡';
+            if (UserInfo.bankcard) {
+                $('#loading').hide();
+                template.render('mycard', UserInfo.bankcard);
+                $('#mycard .row').click(page.mycard.binding);
+            }
+            else {
+                return routie('binding');
+            }
+        },
+        binding: function () {
+            return routie('binding');
+        }
+    },
+
+    binding: {
+        $selector: null,
+        bank: '',
+        init: function () {
+            document.title = '绑定银行卡';
             $('#loading').hide();
-            template.render('mycard', UserInfo.bankcard);
+            template.render('binding', {
+                bankList: bank.getlist()
+            });
+
+            page.binding.$selector = $('#binding div:eq(0)');
+            page.binding.$selector.click(function () {
+                $('#binding ul').toggleClass('hide');
+            });
+
+            $('#binding div').click(function () {
+                $(this).find('input').focus();
+            });
+
+            $('#binding li').click(page.binding.chooseBank);
+            $('#binding button').click(page.binding.finish);
+        },
+        chooseBank: function () {
+            var code = $(this).find('i').attr("class").substr(10);
+            page.binding.$selector.find('i').attr("class", 'icon bank-' + code);
+            page.binding.$selector.find('span').text(bank.bankList[code]);
+            page.binding.bank = code;
+            $('#binding ul').toggleClass('hide');
+        },
+        finish: function () {
+            if (page.isLoading)return;
+
+            var cardNum, name, bank;
+
+            bank = page.binding.bank;
+            cardNum = $('input.cardNum').val();
+            name = $('input.name').val();
+
+            if (bank == '')return layer.msg('请选择银行');
+            if (cardNum.length < 10)return layer.msg('请填写正确的银行卡号');
+            if (name.length < 2)return layer.msg('请填写姓名');
+
+            ex.jsonp({
+                url: g$url + 'User/userInfo?_method=POST',
+                data: {
+                    bankcard: {
+                        cardNum: cardNum,
+                        name: name,
+                        bank: bank
+                    }
+                },
+                success: function (obj) {
+                    obj = $.parseJSON(obj);
+                    if (!obj.code) {
+                        layer.msg('绑定银行卡成功！');
+                        UserInfo.bankcard = {
+                            cardNum: cardNum,
+                            name: name,
+                            bank: bank
+                        };
+                        return routie('mycard');
+                    }
+                    else {
+                        return layer.msg(obj.msg);
+                    }
+                },
+                beforeSend: function () {
+                    $('#loading').show();
+                    page.isLoading = true;
+                },
+                complete: function () {
+                    $('#loading').hide();
+                    page.isLoading = false;
+                }
+            })
         }
     }
 };
-

@@ -1,10 +1,15 @@
+.hide{
+    display: none;
+}
+
 .icon {
     display: inline-block;
     width: 20px;
     height: 20px;
     margin-right: 10px;
     vertical-align: middle;
-    background: no-repeat center;
+    background-repeat:no-repeat;
+    background-position:center;
     background-size: contain;
 }
 
@@ -14,6 +19,10 @@
 
 .icon-list {
     background-image: url("imgs/icon-list.png");
+}
+
+.icon-switch {
+    background-image: url("imgs/icon-switch.png");
 }
 
 .supposed {
@@ -144,3 +153,154 @@
 /*'COMMCNSH'=>1020, //交通银行*/
 /*'CIBKCNBJ'=>1021, //中信银行*/
 /*'GDBKCN22'=>1027, //广发银行*/
+
+#mycard .bar{
+    background: white;
+    margin-top: 8px;
+    padding:8px 15px;
+}
+
+#mycard .bank-icon{
+    margin-left:5px;
+    margin-right:15px;
+    width: 32px;
+    height: 32px;
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#mycard .bank-icon>div{
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    background-repeat:no-repeat;
+    background-position:center;
+    background-size: contain;
+}
+
+#mycard .info{
+    vertical-align: middle;
+    display: inline-block;
+}
+
+#mycard .info>p{
+    padding:1px;
+}
+
+#mycard .info>p:nth-child(1){
+    color: #1a1a1a;
+    font-size: 32rem;
+}
+
+#mycard .info>p:nth-child(2){
+    color: #1a1a1a;
+    font-size: 24rem;
+}
+
+#mycard .info>p:nth-child(3){
+    color: #888888;
+    font-size: 24rem;
+}
+
+#mycard .bank-shade{
+    width: 100px;
+    height: 70px;
+    position: absolute;
+    background-repeat:no-repeat;
+    background-position:top;
+    background-size: cover;
+    opacity: 0.1;
+    right:0;
+    margin:-62px 30px;
+}
+
+#mycard .row{
+    padding: 3px;
+    margin-top: 8px;
+    text-align: center;
+    background: white;
+    font-size: 28rem;
+}
+
+#mycard .row>*{
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#binding>p{
+    color: #888888;
+    font-size: 24rem;
+    padding:10px 10px 0 10px;
+    line-height: 20px;
+}
+
+#binding>ul{
+    position: absolute;
+    width: 100%;
+}
+
+#binding li{
+    border-left: solid 1px #aaaaaa;
+    border-right: solid 1px #aaaaaa;
+    border-top: solid 1px #dfdfdf;
+    border-bottom: none;
+    margin:0 10px;
+    padding:5px 15px;
+    background-color: #f1f3f3;
+}
+
+#binding li:last-child{
+    border-radius: 0 0 4px 4px;
+    border-bottom: solid 1px #aaaaaa;
+}
+
+#binding li>span{
+    margin-left: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#binding>div{
+    font-size:32rem;
+    color: #1a1a1a;
+    border:solid 1px #aaaaaa;
+    margin:0 10px;
+}
+
+#binding>div:nth-child(2){
+    margin-top: 10px;
+    padding:5px 15px;
+    border-radius: 4px 4px 0 0;
+    border-bottom: none;
+}
+
+#binding>div:nth-child(4){
+    padding:5px 15px;
+    border-radius:0;
+}
+
+#binding>div:nth-child(5){
+    padding:5px 15px;
+    border-radius:0 0 4px 4px;
+    border-top: none;
+}
+
+#binding>div>input{
+    font-size:32rem;
+    color: #1a1a1a;
+    width: 100%;
+    background-color: #f1f3f3;
+}
+
+#binding button{
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    background-color: #67d2ca;
+    font-size: 36rem;
+    padding:5px 0;
+    text-align: center;
+    border: none;
+    font-family: "方正兰亭黑", "微软雅黑", sans-serif;
+    color: white;
+}

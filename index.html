@@ -6,6 +6,7 @@
     <meta name="viewport"
           content="width=device-width,initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <script src="include/dev.min.js"></script>
+    <script src="include/tatooSDK.js"></script>
     <script src="main.js"></script>
     <link href="universe.css" rel="stylesheet">
     <link href="style.css" rel="stylesheet">
@@ -78,48 +79,48 @@
 </script>
 
 <script id="mycard" type="text/template" class="template">
-    <div>
-        <div>
-            <${'img'} src='imgs/bank/${bank}.png'/>
+    <div class="bar">
+        <div class="bank-icon">
+            <div class='bank-${bank}'></div>
         </div>
-        <div>
+        <div class="info">
             <p>${name}</p>
 
-            <p>${bank,formatBank}</p>
+            <p>${bank|formatBank}</p>
 
-            <p>${cardNum.substr(4)}</p>
+            <p>尾号${cardNum.substr(-4)}</p>
         </div>
-        <${'img'} src='${bank}'/>
+        <div class="bank-shade bank-${bank}"></div>
     </div>
-    <div>
+    <div class="row">
         <i class="icon icon-switch"></i>
-        更换银行卡
+        <span>更换银行卡</span>
     </div>
 </script>
 
 <script id="binding" type="text/template" class="template">
 
     <p>请填写银行卡信息，用于收取定金</p>
-    <div><span class="input-placeholder">选择银行</span></div>
-    <ul>
-        {@each 银行列表 as el}
-        <li><i class="icon icon-${银行代码}"></i>${银行代码->银行名}</li>
-        ｛@/each}
+    <div><i></i><span class="bank-choose">选择银行</span></div>
+    <ul class="hide">
+        {@each bankList as el}
+        <li><i class="icon bank-${el.code}"></i><span>${el.name}</span></li>
+        {@/each}
     </ul>
     <div>
-        <input type="tel" maxlength="22" placeholder="输入银行卡号"/>
+        <input class="cardNum" type="tel" maxlength="22" placeholder="输入银行卡号"/>
     </div>
     <div>
-        <input type="text" maxlength="8" placeholder="输入姓名"/>
+        <input class="name" type="text" maxlength="8" placeholder="输入姓名"/>
     </div>
 
     <p>注意</p>
-    <p>1.银行卡开户人信息必须用填写的姓名一致，才能提现。</p>
-    <p>2.开户银行、卡号必须准确无误，否则无法提现。</p>
-    <p>3.银行卡仅支持储蓄卡，请不要填写信用卡。</p>
-    <p>4.绑定62开头，有银联标识的储蓄卡，提现更及时。</p>
+    <p>1.银行卡开户人信息必须用填写的姓名一致，才能提现。<br>
+    2.开户银行、卡号必须准确无误，否则无法提现。<br>
+    3.银行卡仅支持储蓄卡，请不要填写信用卡。<br>
+    4.绑定62开头，有银联标识的储蓄卡，提现更及时。</p>
 
-    <div>完成</div>
+    <button>完成</button>
 </script>
 
 </body>
