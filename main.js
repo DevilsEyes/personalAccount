@@ -8,6 +8,7 @@ var UserInfo = {};
 tatoo.get('SessionId', function (obj) {
     console.dir(obj);
     g$sid = obj;
+    layer.msg('sessionId:' + obj.sessionId);
 });
 
 window.addEventListener('load', function () {
