@@ -8,7 +8,8 @@ var UserInfo = {};
 tatoo.get('SessionId', function (obj) {
     console.dir(obj);
     g$sid = obj.sessionId;
-    alert(g$sid);
+    //alert(g$sid);
+    Start();
     //layer.msg('sessionId:' + obj.sessionId);
 });
 
@@ -89,44 +90,50 @@ var template = {
     }
 };
 
-$(document).ready(function () {
-
+var Start = function(){
     $('script.template').each(function () {
         var $this = $(this);
         template[$this.attr('id')] = juicer($this.html());
         $this.remove();
     });
-    console.dir(template);
 
-    ex.jsonp({
-        url: g$url + 'User/login?_method=POST',
-        data: {
-            phonenum: '13261712253',
-            password: '123456'
-        },
-        success: function (obj) {
-            obj = $.parseJSON(obj);
-            console.dir(obj);
-            if (!obj.code) {
-                UserInfo = obj.data.userInfo;
-                UserInfo.SessionId = g$sid;
-//------------------------------------------------------------------------
-                routie({
-                    "info": page.info.init,
-                    "details": page.details.init,
-                    "mycard": page.mycard.init,
-                    "binding": page.binding.init,
-                    "*": function () {
-                        location.hash = '#info'
-                    }
-                });
-//------------------------------------------------------------------------
-            } else {
-                layer.msg(obj.msg);
-            }
+    routie({
+        "info": page.info.init,
+        "details": page.details.init,
+        "mycard": page.mycard.init,
+        "binding": page.binding.init,
+        "*": function () {
+            location.hash = '#info'
         }
     });
-});
+};
+
+//$(document).ready(function () {
+//
+//
+//    console.dir(template);
+//
+//    ex.jsonp({
+//        url: g$url + 'User/info?_method=GET',
+//        data: {
+//            phonenum: '13261712253',
+//            password: '123456'
+//        },
+//        success: function (obj) {
+//            obj = $.parseJSON(obj);
+//            console.dir(obj);
+//            if (!obj.code) {
+//                UserInfo = obj.data.userInfo;
+//                UserInfo.SessionId = g$sid;
+////------------------------------------------------------------------------
+//                Start();
+////------------------------------------------------------------------------
+//            } else {
+//                layer.msg(obj.msg);
+//            }
+//        }
+//    });
+//});
 
 var page = {
     isLoading: false,
