@@ -3,14 +3,28 @@ var g$url = 'http://123.57.42.13/Wenshen/V3.0.0/';
 
 var g$sid = '这是一个获取SessionId';//获取SessionId
 var UserInfo = {};
-//var g$sid = location.search.substr(1).match(/_id=([^\b&]*)/)[1];//获取店铺id
 
 tatoo.get('SessionId', function (obj) {
     console.dir(obj);
     g$sid = obj.sessionId;
-    //alert(g$sid);
-    Start();
-    //layer.msg('sessionId:' + obj.sessionId);
+    console.log('sessionId:' + g$sid);
+
+    $('script.template').each(function () {
+        var $this = $(this);
+        template[$this.attr('id')] = juicer($this.html());
+        $this.remove();
+    });
+
+    routie({
+        "info": page.info.init,
+        "details": page.details.init,
+        "mycard": page.mycard.init,
+        "binding": page.binding.init,
+        "*": function () {
+            location.hash = '#info'
+        }
+    });
+
 });
 
 window.addEventListener('load', function () {
@@ -28,8 +42,10 @@ var ex = {
                 layer.msg('您的网络连接不太顺畅哦!');
             },
             beforeSend: obj.beforeSend ? obj.beforeSend : function () {
+                $('#loading').show();
             },
             complete: obj.complete ? obj.complete : function () {
+                $('#loading').hide();
             }
         })
     }
@@ -57,16 +73,16 @@ var bank = {
         'SPDBCNSH': '上海浦东发展银行',
         'ABOCCNBJ': '农业银行',
 
-        //'FJIBCNBA': '兴业银行',
-        //'BJCNCNBJ': '北京银行',
-        //'EVERCNBJ': '光大银行',
+        'FJIBCNBA': '兴业银行',
+        'BJCNCNBJ': '北京银行',
+        'EVERCNBJ': '光大银行',
         'MSBCCNBJ': '民生银行',
         'SZCBCNBS': '平安银行',
 
         'COMMCNSH': '深圳银行',
         'SZDBCNBS': '交通银行',
-        'CIBKCNBJ': '中信银行'
-        //'GDBKCN22': '广发银行'
+        'CIBKCNBJ': '中信银行',
+        'GDBKCN22': '广发银行'
     },
     getlist: function () {
         var array = [];
@@ -90,56 +106,15 @@ var template = {
     }
 };
 
-var Start = function(){
-    $('script.template').each(function () {
-        var $this = $(this);
-        template[$this.attr('id')] = juicer($this.html());
-        $this.remove();
-    });
-
-    routie({
-        "info": page.info.init,
-        "details": page.details.init,
-        "mycard": page.mycard.init,
-        "binding": page.binding.init,
-        "*": function () {
-            location.hash = '#info'
-        }
-    });
-};
-
-//$(document).ready(function () {
-//
-//
-//    console.dir(template);
-//
-//    ex.jsonp({
-//        url: g$url + 'User/info?_method=GET',
-//        data: {
-//            phonenum: '13261712253',
-//            password: '123456'
-//        },
-//        success: function (obj) {
-//            obj = $.parseJSON(obj);
-//            console.dir(obj);
-//            if (!obj.code) {
-//                UserInfo = obj.data.userInfo;
-//                UserInfo.SessionId = g$sid;
-////------------------------------------------------------------------------
-//                Start();
-////------------------------------------------------------------------------
-//            } else {
-//                layer.msg(obj.msg);
-//            }
-//        }
-//    });
-//});
-
 var page = {
     isLoading: false,
     info: {
         init: function () {
             document.title = '账户';
+            template.render('info', {
+                accountAmount: 0
+            });
+            //先展示UI
 
             ex.jsonp({
                 url: g$url + 'User/income?_method=GET',
@@ -148,9 +123,9 @@ var page = {
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
-                    //console.dir(obj);
 
                     if (!obj.code) {
+//---------------------------------------------------------------------
                         var data = obj.data;
                         template.render('info', {
                             accountAmount: data.waitDrawAmount + data.drawingAmount
@@ -160,8 +135,7 @@ var page = {
                             if (index == 0)$(this).click(page.info.toMycard);
                             if (index == 1)$(this).click(page.info.toDetails);
                         });
-
-                        $('#loading').hide();
+//---------------------------------------------------------------------
                     }
                     else {
                         layer.msg(obj.msg);
@@ -239,20 +213,36 @@ var page = {
                 }
             })
         }
-
     },
 
     mycard: {
         init: function () {
             document.title = '我的银行卡';
-            if (UserInfo.bankcard) {
-                $('#loading').hide();
-                template.render('mycard', UserInfo.bankcard);
-                $('#mycard .row').click(page.mycard.binding);
-            }
-            else {
-                return routie('binding');
-            }
+            ex.jsonp({
+                url: g$url + 'User/info?_method=GET',
+                data: {
+                    _sid:g$sid
+                },
+                success: function (obj) {
+                    obj = $.parseJSON(obj);
+                    console.dir(obj);
+                    if (!obj.code) {
+                        UserInfo = obj.data.userInfo;
+//------------------------------------------------------------------------
+                        if (UserInfo.bankcard) {
+                            $('#loading').hide();
+                            template.render('mycard', UserInfo.bankcard);
+                            $('#mycard .row').click(page.mycard.binding);
+                        }
+                        else {
+                            return routie('binding');
+                        }
+//------------------------------------------------------------------------
+                    } else {
+                        layer.msg(obj.msg);
+                    }
+                }
+            });
         },
         binding: function () {
             return routie('binding');
@@ -319,7 +309,7 @@ var page = {
                             name: name,
                             bank: bank
                         };
-                        return routie('mycard');
+                        return history.back();
                     }
                     else {
                         return layer.msg(obj.msg);

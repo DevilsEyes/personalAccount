@@ -31,6 +31,7 @@
 
         callback: function (str) {//用于给客户端回调
             //------------------------------------------
+            //   tatoo.callback(string...s)
             //
             //   str为返回值
             //   格式：<字符串> target|dataJson
