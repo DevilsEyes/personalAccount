@@ -256,6 +256,7 @@
 
 #binding li>span{
     margin-left: 5px;
+    font-size: 24rem;
     display: inline-block;
     vertical-align: middle;
 }
@@ -298,7 +299,7 @@
     bottom: 0;
     background-color: #67d2ca;
     font-size: 36rem;
-    padding:5px 0;
+    padding:8px 0;
     text-align: center;
     border: none;
     font-family: "方正兰亭黑", "微软雅黑", sans-serif;
