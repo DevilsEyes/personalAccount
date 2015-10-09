@@ -4,10 +4,7 @@ var g$url = 'http://123.57.42.13/Wenshen/V3.0.0/';
 var g$sid = '这是一个获取SessionId';//获取SessionId
 var UserInfo = {};
 
-tatoo.get('SessionId', function (obj) {
-    console.dir(obj);
-    g$sid = obj.sessionId;
-    console.log('sessionId:' + g$sid);
+$(document).ready(function(){
 
     $('script.template').each(function () {
         var $this = $(this);
@@ -15,14 +12,20 @@ tatoo.get('SessionId', function (obj) {
         $this.remove();
     });
 
-    routie({
-        "info": page.info.init,
-        "details": page.details.init,
-        "mycard": page.mycard.init,
-        "binding": page.binding.init,
-        "*": function () {
-            location.hash = '#info'
-        }
+    tatoo.get('SessionId', function (obj) {
+        console.dir(obj);
+        g$sid = obj.sessionId;
+        console.log('sessionId:' + g$sid);
+
+        routie({
+            "info": page.info.init,
+            "details": page.details.init,
+            "mycard": page.mycard.init,
+            "binding": page.binding.init,
+            "*": function () {
+                location.hash = '#info'
+            }
+        });
     });
 
 });
@@ -48,6 +51,9 @@ var ex = {
                 $('#loading').hide();
             }
         })
+    },
+    url:function(hash){
+        return 'h5://' + location.host + location.pathname + location.search + '#' + hash;
     }
 };
 
@@ -144,14 +150,10 @@ var page = {
             })
         },
         toMycard: function () {
-            if (UserInfo.bankcard) {
-                routie('mycard');
-            } else {
-                routie('binding');
-            }
+            tatoo.pushStack(ex.url('mycard'));
         },
         toDetails: function () {
-            routie('details');
+            tatoo.pushStack(ex.url('details'));
         }
     },
 
@@ -219,13 +221,14 @@ var page = {
         init: function () {
             document.title = '我的银行卡';
             ex.jsonp({
-                url: g$url + 'User/info?_method=GET',
+                url: g$url + 'User/login?_method=GET',
                 data: {
                     _sid:g$sid
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
                     console.dir(obj);
+                    //template.render('test',{content:al$print(obj)});
                     if (!obj.code) {
                         UserInfo = obj.data.userInfo;
 //------------------------------------------------------------------------
@@ -235,7 +238,7 @@ var page = {
                             $('#mycard .row').click(page.mycard.binding);
                         }
                         else {
-                            return routie('binding');
+                            return tatoo.pushStack(ex.url('binding'));
                         }
 //------------------------------------------------------------------------
                     } else {
@@ -245,7 +248,7 @@ var page = {
             });
         },
         binding: function () {
-            return routie('binding');
+            return tatoo.pushStack(ex.url('binding'));
         }
     },
 
@@ -309,7 +312,7 @@ var page = {
                             name: name,
                             bank: bank
                         };
-                        return history.back();
+                        return tatoo.popStack(true);
                     }
                     else {
                         return layer.msg(obj.msg);
