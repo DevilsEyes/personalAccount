@@ -70,6 +70,13 @@
                 var stack = window['tattoo_Android'].getStack();
                 return $.parseJSON(stack);
             }
+        },
+
+        setTitle: function (str) {
+            document.title=str;
+            if ($tatoo.isIOS) {
+                return location.href = 'wsdk://';
+            }
         }
 
         //Webview堆栈操作

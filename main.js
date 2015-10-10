@@ -116,7 +116,7 @@ var page = {
     isLoading: false,
     info: {
         init: function () {
-            document.title = '账户';
+            tatoo.setTitle('账户');
             template.render('info', {
                 accountAmount: 0
             });
@@ -163,7 +163,7 @@ var page = {
         index: 0,
 
         init: function () {
-            document.title = '账户明细';
+            tatoo.setTitle('账户明细');
             $('#loading').hide();
             template.render('details', {});
             page.details.load();
@@ -219,7 +219,7 @@ var page = {
 
     mycard: {
         init: function () {
-            document.title = '我的银行卡';
+            tatoo.setTitle('我的银行卡');
             ex.jsonp({
                 url: g$url + 'User/login?_method=GET',
                 data: {
@@ -236,6 +236,7 @@ var page = {
                             $('#loading').hide();
                             template.render('mycard', UserInfo.bankcard);
                             $('#mycard .row').click(page.mycard.binding);
+
                         }
                         else {
                             return tatoo.pushStack(ex.url('binding'));
@@ -281,7 +282,7 @@ var page = {
         $selector: null,
         bank: '',
         init: function () {
-            document.title = '绑定银行卡';
+            tatoo.setTitle('绑定银行卡');
             $('#loading').hide();
             template.render('binding', {
                 bankList: bank.getlist()

@@ -237,6 +237,7 @@
 #binding>ul{
     position: absolute;
     width: 100%;
+    margin-bottom: 100px;
 }
 
 #binding li{
