@@ -17,9 +17,8 @@ input, select, textarea {
 }
 
 input::-webkit-input-placeholder, textarea::-webkit-input-placeholder {
-    font-size: 3.2%;
     color: #bfbfbf;
-    font-size: 24rem;
+    font-size: 12px;
     font-family: "方正兰亭黑", "微软雅黑", sans-serif;
 }
 

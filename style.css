@@ -41,15 +41,15 @@
 }
 
 #info .amount-board h1 {
-    font-size: 80rem;
+    font-size: 40px;
 }
 
 #info .amount-board p {
-    font-size: 24rem;
+    font-size: 12px;
 }
 
 #info .row {
-    font-size: 28rem;
+    font-size: 14px;
     background: white;
     margin-top: 8px;
     padding: 10px;
@@ -69,14 +69,14 @@
 }
 
 #info .tip {
-    font-size: 24rem;
+    font-size: 12px;
     color: #aaa;
     margin: 15px;
 }
 
 #details .tip {
     padding: 10px 0;
-    font-size: 28rem;
+    font-size: 14px;
     color: #888888;
     text-align: center;
 }
@@ -87,7 +87,7 @@
 
 #details .row{
     padding: 10px 10px 10px 15px;
-    font-size: 24rem;
+    font-size: 12px;
     border-bottom: solid 1px #dddddd;
 }
 
@@ -199,17 +199,17 @@
 
 #mycard .info>p:nth-child(1){
     color: #1a1a1a;
-    font-size: 32rem;
+    font-size: 16px;
 }
 
 #mycard .info>p:nth-child(2){
     color: #1a1a1a;
-    font-size: 24rem;
+    font-size: 12px;
 }
 
 #mycard .info>p:nth-child(3){
     color: #888888;
-    font-size: 24rem;
+    font-size: 12px;
 }
 
 #mycard .bank-shade{
@@ -229,7 +229,7 @@
     margin-top: 8px;
     text-align: center;
     background: white;
-    font-size: 28rem;
+    font-size: 14px;
 }
 
 #mycard .row>*{
@@ -239,7 +239,7 @@
 
 #binding>p{
     color: #888888;
-    font-size: 24rem;
+    font-size: 12px;
     padding:10px 10px 0 10px;
     line-height: 20px;
 }
@@ -267,13 +267,13 @@
 
 #binding li>span{
     margin-left: 5px;
-    font-size: 24rem;
+    font-size: 12px;
     display: inline-block;
     vertical-align: middle;
 }
 
 #binding>div{
-    font-size:32rem;
+    font-size:16px;
     color: #1a1a1a;
     border:solid 1px #aaaaaa;
     margin:0 10px;
@@ -298,7 +298,7 @@
 }
 
 #binding>div>input{
-    font-size:32rem;
+    font-size:16px;
     color: #1a1a1a;
     width: 100%;
     background-color: #f1f3f3;
@@ -309,7 +309,7 @@
     position: fixed;
     bottom: 0;
     background-color: #67d2ca;
-    font-size: 36rem;
+    font-size: 18px;
     padding:8px 0;
     text-align: center;
     border: none;
