@@ -1,22 +1,6 @@
 (function (a) {
     var u = navigator.userAgent;
 
-    //a.connectWebViewJavascriptBridge = function (callback) {
-    //    if (window.WebViewJavascriptBridge) {
-    //        callback(WebViewJavascriptBridge);
-    //    } else {
-    //        document.addEventListener('WebViewJavascriptBridgeReady', function() {callback(WebViewJavascriptBridge);}, false);
-    //    }
-    //};
-    //a.connectWebViewJavascriptBridge(function(bridge) {
-    //    bridge.init(function(message, responseCallback) {});
-    //
-    //    bridge.registerHandler('iosCallback', function(data, responseCallback) {
-    //        $('#loading').hide();
-    //        template.render('test',{content:al$print(data)});
-    //    })
-    //});
-
     //暴露接口
     var tatoo = {
         data: {},//用于存放从客户端获得的数据
@@ -49,7 +33,7 @@
 
         },
 
-        callback: function (target,dataJson) {//用于给客户端回调
+        callback: function (target, dataJson) {//用于给客户端回调
             //------------------------------------------
             //   window.tatoo.callback(target,dataJson)
             //
@@ -59,8 +43,6 @@
             //       userInfo|"{'nickname':'呵呵哒'}"
             //
             //-------------------------------------------
-            //template.render('test',{content:target+':'+dataJson});
-
 
             if ($tatoo.isIOS) {
                 tatoo.data[target] = $.parseJSON(dataJson);//存放数据
@@ -75,14 +57,16 @@
                 url = 'h5://' + location.host + location.pathname + location.search + location.hash
             }
             if ($tatoo.isAndroid)$tatoo.AndroidPushStack(url);
+            if ($tatoo.isIOS)$tatoo.IosPushStack(url);
         },
 
         popStack: function (isRefresh, url) {
-            if ($tatoo.isAndroid)$tatoo.AndroidPopStack(isRefresh,url);
+            if ($tatoo.isAndroid)$tatoo.AndroidPopStack(isRefresh, url);
+            if ($tatoo.isIOS)$tatoo.IosPopStack(isRefresh, url);
         },
 
-        getStack:function(){
-            if ($tatoo.isAndroid){
+        getStack: function () {
+            if ($tatoo.isAndroid) {
                 var stack = window['tattoo_Android'].getStack();
                 return $.parseJSON(stack);
             }
@@ -114,7 +98,7 @@
             AndroidPushStack: function (url) {
                 window['tattoo_Android'].push(url)
             },
-            AndroidPopStack: function (isRefresh,url) {
+            AndroidPopStack: function (isRefresh, url) {
                 if (url === 0) {
                     window['tattoo_Android'].popUntilBottom();
                 }
@@ -122,26 +106,48 @@
                 if (isRefresh) {
                     if (!url) {
                         window['tattoo_Android'].popTopAndRefresh();
-                    }else{
+                    } else {
                         window['tattoo_Android'].popUntilAndRefresh(url);
                     }
                 } else {
                     if (!url) {
                         window['tattoo_Android'].popTop();
-                    }else{
+                    } else {
                         window['tattoo_Android'].popUntil(url);
                     }
                 }
             },
 
+            IosPushStack: function (url) {
+                location.href = 'wsdk://push(' + url + ')';
+            },
+            IosPopStack: function (isRefresh, url) {
+                if (url === 0) {
+                    location.href = 'wsdk://popUntilBottom()';
+                }
+
+                if (isRefresh) {
+                    if (!url) {
+                        location.href = 'wsdk://popTopAndRefresh()';
+                    } else {
+                        location.href = 'wsdk://popUntilAndRefresh(' + url + ')';
+                    }
+                } else {
+                    if (!url) {
+                        location.href = 'wsdk://popTop()';
+                    } else {
+                        location.href = 'wsdk://popUntil(' + url + ')';
+                    }
+                }
+            },
+
+
             //isAndroid:true,
             isAndroid: u.indexOf('Android') > -1, //android终端
-            isIOS: true
-            //isIOS: u.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) != null//ios终端
+            //isIOS: true
+            isIOS: u.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) != null//ios终端
         };
     })();
-
-    console.log('isIOS:'+$tatoo.isIOS);
 
     return a.tatoo = tatoo;
 })(window);

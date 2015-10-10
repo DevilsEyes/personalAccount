@@ -150,7 +150,7 @@ var page = {
             })
         },
         toMycard: function () {
-            tatoo.pushStack(ex.url('mycard'));
+            page.mycard.check();
         },
         toDetails: function () {
             tatoo.pushStack(ex.url('details'));
@@ -249,6 +249,31 @@ var page = {
         },
         binding: function () {
             return tatoo.pushStack(ex.url('binding'));
+        },
+        check:function(){
+            ex.jsonp({
+                url: g$url + 'User/login?_method=GET',
+                data: {
+                    _sid:g$sid
+                },
+                success: function (obj) {
+                    obj = $.parseJSON(obj);
+                    console.dir(obj);
+                    if (!obj.code) {
+                        UserInfo = obj.data.userInfo;
+//------------------------------------------------------------------------
+                        if (UserInfo.bankcard) {
+                            return tatoo.pushStack(ex.url('mycard'));
+                        }
+                        else {
+                            return tatoo.pushStack(ex.url('binding'));
+                        }
+//------------------------------------------------------------------------
+                    } else {
+                        layer.msg(obj.msg);
+                    }
+                }
+            });
         }
     },
 
