@@ -58,17 +58,26 @@ var ex = {
 };
 
 juicer.register('formatTime', function (str) {
-    var DATE = new Date(str);
-    return DATE.getFullYear() + '年' + DATE.getMonth() + '月' + DATE.getDate() + '日， ' + DATE.getHours() + ':' + DATE.getMinutes();
+    var DATE = new Date(+str);
+    var m = DATE.getMinutes();
+    if(m<10){
+        m='0'+m;
+    }
+    return DATE.getFullYear() + '年' + DATE.getMonth() + '月' + DATE.getDate() + '日，' + DATE.getHours() + ':' + m;
 });
 
-juicer.register('formatAmount', function (str, type) {
+juicer.register('formatAmount', function (str, type,fee) {
     var color = type ? 'red' : 'green';
-    return '<p style="color:' + color + '">str</p>';
+    if(fee)return '<p style="color:' + color + '">'+str+'&nbsp</p><p>|&nbsp服务费:'+fee+'</p>';
+    else return '<p style="color:' + color + '">'+str+'</p>';
 });
 
 juicer.register('formatBank', function (str) {
     return bank.bankList[str];
+});
+
+juicer.register('drawalMode', function (b,c) {
+    return bank.bankList[b] + '(尾号'+c.substr(-4)+')';
 });
 
 var bank = {
@@ -165,34 +174,39 @@ var page = {
         init: function () {
             tatoo.setTitle('账户明细');
             $('#loading').hide();
+            //template.render('test',{content:'0'});
             template.render('details', {});
             page.details.load();
 
-            page.details.timer = setInterval(function () {
-                if (page.details.isLoading)return;
-                var sh = $(window).scrollTop(),
-                    wh = $(window).height(),
-                    dh = $(document).height();
-                if (sh + wh > dh - 100) {
-                    $('#details .tip').fadeIn(100);
-                    page.details.load();
-                }
-            }, 50)
+            //page.details.timer = setInterval(function () {
+            //    if (page.details.isLoading)return;
+            //    var sh = $(window).scrollTop(),
+            //        wh = $(window).height(),
+            //        dh = $(document).height();
+            //    if (sh + wh > dh - 100) {
+            //        $('#details .tip').fadeIn(100);
+            //        page.details.load();
+            //    }
+            //}, 50)
         },
         load: function () {
             ex.jsonp({
                 url: g$url + 'BillAccount/list?_method=GET',
                 data: {
-                    _sid: g$sid,
-                    index: page.details.index,
-                    limit: 6
+                    _sid: g$sid
+                    //index: page.details.index,
+                    //limit: 6
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
                     console.dir(obj);
+                    //template.render('test',{content:al$print(obj.data)});
 
                     if (!obj.code) {
                         var data = obj.data;
+                        //template.render('test',{content:'length:'+obj.data.length});
+                        //template.render('test',{content:al$print(obj.data)});
+
                         if ((!data.length) && page.details.index == 0) {
                             $('#details .tip').text('一条记录也没有呢');
                             clearInterval(page.details.timer);
@@ -355,4 +369,35 @@ var page = {
             })
         }
     }
+};
+
+
+al$print = function(obj){
+    function space(i){
+        if(i==1)return '&nbsp';
+        else{
+            return '&nbsp' + space(i-1);
+        }
+    }
+    var str='';
+    for (var i in obj) {
+        str += space(1) + i + ': ' + obj[i] + '<br/>';
+
+        if (typeof obj[i] == 'object') {
+            for (var j in obj[i]) {
+                str += space(5) + '└─&nbsp' + j + ': ' + obj[i][j] + '<br/>';
+
+                if (typeof obj[i][j] == 'object') {
+                    for (var k in obj[i][j]) {
+                        str += space(10)+'└─&nbsp' + k + ': ' + obj[i][j][k] + '<br/>';
+                    }
+                    str += '<br>';
+                }
+            }
+            str += '<br>';
+        }
+    }
+    str += '<br>';
+
+    return str;
 };

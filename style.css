@@ -81,6 +81,16 @@
     text-align: center;
 }
 
+#details .row>p,#details .row>div{
+    display: inline-block;
+}
+
+#details .row{
+    padding: 10px 10px 10px 15px;
+    font-size: 24rem;
+    border-bottom: solid 1px #dddddd;
+}
+
 .bank-CMBCCNBS {
     background-image: url(imgs/bank/CMBCCNBS.png);
 }
