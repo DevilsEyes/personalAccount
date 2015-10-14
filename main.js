@@ -1,84 +1,13 @@
-//var g$url = 'http://api.meizhanggui.cc/Wenshen/V3.0.0/';
-var g$url = 'http://123.57.42.13/Wenshen/V3.0.0/';
-
+var g$url = 'http://api.meizhanggui.cc/Wenshen/V3.0.0/';
+//var g$url = 'http://123.57.42.13/Wenshen/V3.0.0/';
 var g$sid = '这是一个获取SessionId';//获取SessionId
+
 var UserInfo = {};
 
-$(document).ready(function(){
-
-    $('script.template').each(function () {
-        var $this = $(this);
-        template[$this.attr('id')] = juicer($this.html());
-        $this.remove();
-    });
-
-    tatoo.get('SessionId', function (obj) {
-        console.dir(obj);
-        g$sid = obj.sessionId;
-        console.log('sessionId:' + g$sid);
-
-        routie({
-            "info": page.info.init,
-            "details": page.details.init,
-            "mycard": page.mycard.init,
-            "binding": page.binding.init,
-            "*": function () {
-                location.hash = '#info'
-            }
-        });
-    });
-
-});
-
+//---------------------------------------------------------------
 window.addEventListener('load', function () {
     FastClick.attach(document.body);
 }, false);
-
-var ex = {
-    jsonp: function (obj) {
-        $.jsonp({
-            url: obj.url,
-            callbackParameter: obj.callbackParameter ? obj.callbackParameter : "callback",
-            data: obj.data ? obj.data : null,
-            success: obj.success,
-            error: obj.error ? obj.error : function () {
-                layer.msg('您的网络连接不太顺畅哦!');
-            },
-            beforeSend: obj.beforeSend ? obj.beforeSend : function () {
-                $('#loading').show();
-            },
-            complete: obj.complete ? obj.complete : function () {
-                $('#loading').hide();
-            }
-        })
-    },
-    url:function(hash){
-        return 'h5://' + location.host + location.pathname + location.search + '#' + hash;
-    }
-};
-
-juicer.register('formatTime', function (str) {
-    var DATE = new Date(+str);
-    var m = DATE.getMinutes();
-    if(m<10){
-        m='0'+m;
-    }
-    return DATE.getFullYear() + '年' + DATE.getMonth() + '月' + DATE.getDate() + '日，' + DATE.getHours() + ':' + m;
-});
-
-juicer.register('formatAmount', function (str, type,fee) {
-    var color = type ? 'red' : 'green';
-    if(fee)return '<p style="color:' + color + '">'+str+'&nbsp</p><p>|&nbsp服务费:'+fee+'</p>';
-    else return '<p style="color:' + color + '">'+str+'</p>';
-});
-
-juicer.register('formatBank', function (str) {
-    return bank.bankList[str];
-});
-
-juicer.register('drawalMode', function (b,c) {
-    return bank.bankList[b] + '(尾号'+c.substr(-4)+')';
-});
 
 var bank = {
     bankList: {
@@ -111,6 +40,29 @@ var bank = {
     }
 };
 
+var ex = {
+    jsonp: function (obj) {
+        $.jsonp({
+            url: obj.url,
+            callbackParameter: obj.callbackParameter ? obj.callbackParameter : "callback",
+            data: obj.data ? obj.data : null,
+            success: obj.success,
+            error: obj.error ? obj.error : function () {
+                layer.msg('您的网络连接不太顺畅哦!');
+            },
+            beforeSend: obj.beforeSend ? obj.beforeSend : function () {
+                $('#loading').show();
+            },
+            complete: obj.complete ? obj.complete : function () {
+                $('#loading').hide();
+            }
+        })
+    },
+    url:function(hash){
+        return 'http://' + location.host + location.pathname + location.search + '#' + hash;
+    }
+};
+
 var template = {
     render: function (page, data) {
         if (page != 'detailsRow') {
@@ -120,6 +72,53 @@ var template = {
         }
     }
 };
+//------------------------------------------------------------------
+
+juicer.register('formatTime', function (str) {
+    var DATE = new Date(+str);
+    var m = DATE.getMinutes();
+    if(m<10){
+        m='0'+m;
+    }
+    return DATE.getFullYear() + '年' + DATE.getMonth() + '月' + DATE.getDate() + '日，' + DATE.getHours() + ':' + m;
+});
+juicer.register('formatAmount', function (str, type,fee) {
+    var color = type ? 'red' : 'green';
+    if(fee)return '<p style="color:' + color + '">'+str+'&nbsp</p><p>|&nbsp服务费:'+fee+'</p>';
+    else return '<p style="color:' + color + '">'+str+'</p>';
+});
+juicer.register('formatBank', function (str) {
+    return bank.bankList[str];
+});
+juicer.register('drawalMode', function (b,c) {
+    return bank.bankList[b] + '(尾号'+c.substr(-4)+')';
+});
+
+$(document).ready(function(){
+
+    $('script.template').each(function () {
+        var $this = $(this);
+        template[$this.attr('id')] = juicer($this.html());
+        $this.remove();
+    });
+
+    tatoo.get('SessionId', function (obj) {
+        g$sid = obj.sessionId;
+
+        //template.render('test',{content:al$print(obj)});
+
+        routie({
+            "info": page.info.init,
+            "details": page.details.init,
+            "mycard": page.mycard.init,
+            "binding": page.binding.init,
+            "*": function () {
+                location.hash = '#info'
+            }
+        });
+    });
+});
+
 
 var page = {
     isLoading: false,

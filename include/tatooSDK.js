@@ -3,158 +3,102 @@
 
     //暴露接口
     var tatoo = {
-        data: {},//用于存放从客户端获得的数据
+
+        navBarClick:null,//用于给客户端存放navbar点击事件
+        client: function (method, params, next) {
+            if (next) {
+                var stamp = '' + $tatoo.count;
+                $tatoo.callbackFunction[stamp] = next;
+                params['stamp'] = stamp;
+                $tatoo.count++;
+            }
+
+            var i,paramsArray=[];
+            for (i in params){
+                paramsArray.push(i + '=' + params[i]);
+            }
+
+            var url = 'wsdk://' + method;
+            if(paramsArray.length)url+='?' + paramsArray.join('&');
+
+            //console.log('hehe');
+            console.log(url);
+            $tatoo.post(url);
+        },
+        callback: function (stamp, dataJson) {//用于给客户端回调
+
+            var data = $.parseJSON(dataJson);
+
+            $tatoo.callbackFunction[stamp](data);//执行回调
+            $tatoo.callbackFunction[stamp] = null;//解除回调事件的注册
+
+        },
+
+
 
         get: function (target, next) {//用户从客户端获取数据
-            //------------------------------------------
-            //
-            //   target为获取内容
-            //   格式：<字符串> target
-            //   例如:
-            //       userInfo
-            //
-            //-------------------------------------------
 
-            if ($tatoo.isAndroid) {
-                var method = 'get' + target.substr(0, 1).toUpperCase() + target.substr(1);
-                //实际调用Android的 getXXXX方法得到一个JSON字符串
-                tatoo.data[target] = $.parseJSON(window['tattoo_Android'][method]());
-
-                return setTimeout(function () {
-                    next(tatoo.data[target]);
-                }, 0);//执行回调
-            } else if ($tatoo.isIOS) {
-                $tatoo.callbackFunction[target] = next;//注册回调事件
-                //$('head').append('<script src="wsdk://' + target +'"></script>');
-                return location.href = 'wsdk://' + target;
-                //  wsdk://SessionId
-                //  wsdk://getStack(a,b)
-            }
+            var method = 'get' + target.substr(0, 1).toUpperCase() + target.substr(1);
+            this.client(method,{},next);
 
         },
-
-        callback: function (target, dataJson) {//用于给客户端回调
-            //------------------------------------------
-            //   window.tatoo.callback(target,dataJson)
-            //
-            //   str为返回值
-            //   格式：<字符串> target|dataJson
-            //   例如:
-            //       userInfo|"{'nickname':'呵呵哒'}"
-            //
-            //-------------------------------------------
-
-            if ($tatoo.isIOS) {
-                tatoo.data[target] = $.parseJSON(dataJson);//存放数据
-                $tatoo.callbackFunction[target](tatoo.data[target]);//执行回调
-                $tatoo.callbackFunction[target] = null;//解除回调事件的注册
-            }
-        },
-
         pushStack: function (url) {
             console.log(url);
             if (typeof url == 'undefined') {
                 url = 'h5://' + location.host + location.pathname + location.search + location.hash
             }
-            if ($tatoo.isAndroid)$tatoo.AndroidPushStack(url);
-            if ($tatoo.isIOS)$tatoo.IosPushStack(url);
+            this.client('push',{url:url});
         },
 
         popStack: function (isRefresh, url) {
-            if ($tatoo.isAndroid)$tatoo.AndroidPopStack(isRefresh, url);
-            if ($tatoo.isIOS)$tatoo.IosPopStack(isRefresh, url);
-        },
-
-        getStack: function () {
-            if ($tatoo.isAndroid) {
-                var stack = window['tattoo_Android'].getStack();
-                return $.parseJSON(stack);
+            if(url === 0)return this.client('popUntilBottom');
+            if(isRefresh){
+                if(url)this.client('popUntil',{url:url});
+                else this.client('popTop');
+            }else{
+                if(url)this.client('popUntilAndRefresh',{url:url});
+                else this.client('popTopAndRefresh');
             }
         },
 
+        getStack: function (next) {
+            this.client('getStack',{},next);
+        },
+
         setTitle: function (str) {
-            document.title=str;
+            document.title = str;
             if ($tatoo.isIOS) {
                 return location.href = 'wsdk://';
             }
         }
-
-        //Webview堆栈操作
-        //-----------------------------------------------------
-        //压栈
-        // push(pageKey)
-        //
-        //清除栈底以上所有
-        // popUntilBottom()
-        //
-        //栈顶弹栈
-        // popTop()
-        // popTopAndRefresh()
-        //
-        //pageKey以上清空
-        // popUntil(pageKey)
-        // popUntilAndRefresh(pageKey)
-
     };
 
     //私有
-    var $tatoo = (function () {
-        return {
-            callbackFunction: {},//异步时注册的回调列表
+    var $tatoo = {
+        count: 1,
+        callbackFunction: {},//异步时注册的回调列表
+        navBarButton:{
+            text:'',
+            textColor:'',
+            imgSrc:''
+        },
 
-            AndroidPushStack: function (url) {
-                window['tattoo_Android'].push(url)
-            },
-            AndroidPopStack: function (isRefresh, url) {
-                if (url === 0) {
-                    window['tattoo_Android'].popUntilBottom();
-                }
+        post:function(url){
 
-                if (isRefresh) {
-                    if (!url) {
-                        window['tattoo_Android'].popTopAndRefresh();
-                    } else {
-                        window['tattoo_Android'].popUntilAndRefresh(url);
-                    }
-                } else {
-                    if (!url) {
-                        window['tattoo_Android'].popTop();
-                    } else {
-                        window['tattoo_Android'].popUntil(url);
-                    }
-                }
-            },
+            if($tatoo.isAndroid){
+                var node = '<img src="'+url+'" type="hidden" id="wsdk">';
+                $('head').append(node).find('#wsdk').remove();
+            }
+            if($tatoo.isIOS){
+                location.href = url;
+            }
+        },
 
-            IosPushStack: function (url) {
-                location.href = 'wsdk://push(' + url + ')';
-            },
-            IosPopStack: function (isRefresh, url) {
-                if (url === 0) {
-                    location.href = 'wsdk://popUntilBottom()';
-                }
-
-                if (isRefresh) {
-                    if (!url) {
-                        location.href = 'wsdk://popTopAndRefresh()';
-                    } else {
-                        location.href = 'wsdk://popUntilAndRefresh(' + url + ')';
-                    }
-                } else {
-                    if (!url) {
-                        location.href = 'wsdk://popTop()';
-                    } else {
-                        location.href = 'wsdk://popUntil(' + url + ')';
-                    }
-                }
-            },
-
-
-            //isAndroid:true,
-            isAndroid: u.indexOf('Android') > -1, //android终端
-            //isIOS: true
-            isIOS: u.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) != null//ios终端
-        };
-    })();
+        //isAndroid:true,
+        isAndroid: u.indexOf('Android') > -1, //android终端
+        //isIOS: true
+        isIOS: u.match(/iPhone/i) || navigator.userAgent.match(/iPad/i) != null//ios终端
+    };
 
     return a.tatoo = tatoo;
 })(window);
