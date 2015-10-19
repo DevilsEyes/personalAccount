@@ -69,7 +69,7 @@
         <div>提款方式</div>
         <p>${remark.bank_type|drawalMode,remark.rec_bankacc}</p>
         <br>
-        <div>入账日期</div>
+        <div>提款日期</div>
         <p>${createTime|formatTime}</p>
 
         {@else}
@@ -80,7 +80,7 @@
         <p>${orderId}</p>
         <br>
         <div>入账日期</div>
-        <p>${createTime|formatTime}</p>
+        <p>${remark.inComeTime|formatTime}</p>
         {@/if}
 
     </div>

@@ -80,7 +80,7 @@ juicer.register('formatTime', function (str) {
     if(m<10){
         m='0'+m;
     }
-    return DATE.getFullYear() + '年' + DATE.getMonth() + '月' + DATE.getDate() + '日，' + DATE.getHours() + ':' + m;
+    return DATE.getFullYear() + '年' + (DATE.getMonth()+1) + '月' + DATE.getDate() + '日，' + DATE.getHours() + ':' + m;
 });
 juicer.register('formatAmount', function (str, type,fee) {
     var color = type ? 'red' : 'green';
