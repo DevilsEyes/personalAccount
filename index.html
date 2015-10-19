@@ -41,6 +41,7 @@
     <!--<img src="imgs/icon-supposed.png" class="supposed"/>-->
     <div class="amount-board">
         <h1>${accountAmount}</h1>
+
         <p>账户余额(元)</p>
     </div>
     <div>
@@ -66,9 +67,11 @@
         <div>提款金额</div>
         $${amount|formatAmount,type}
         <br>
+        {@if remark.bank_type}
         <div>提款方式</div>
         <p>${remark.bank_type|drawalMode,remark.rec_bankacc}</p>
         <br>
+        {@/if}
         <div>提款日期</div>
         <p>${createTime|formatTime}</p>
 
@@ -76,11 +79,17 @@
         <div>入账金额</div>
         $${amount|formatAmount,type,percentage}
         <br>
+
         <div>订单号</div>
         <p>${orderId}</p>
         <br>
+
         <div>入账日期</div>
+        {@if remark.inComeTime}
         <p>${remark.inComeTime|formatTime}</p>
+        {@else}
+        <p>${createTime|formatTime}</p>
+        {@/if}
         {@/if}
 
     </div>
