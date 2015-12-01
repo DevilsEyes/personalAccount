@@ -85,7 +85,7 @@
         <br>
 
         <div>入账日期</div>
-        {@if remark.inComeTime}
+        {@if remark&&remark.inComeTime}
         <p>${remark.inComeTime|formatTime}</p>
         {@else}
         <p>${createTime|formatTime}</p>

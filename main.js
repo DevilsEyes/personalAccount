@@ -58,7 +58,7 @@ var ex = {
             }
         })
     },
-    url:function(hash){
+    url: function (hash) {
         return 'http://' + location.host + location.pathname + location.search + '#' + hash;
     }
 };
@@ -77,24 +77,24 @@ var template = {
 juicer.register('formatTime', function (str) {
     var DATE = new Date(+str);
     var m = DATE.getMinutes();
-    if(m<10){
-        m='0'+m;
+    if (m < 10) {
+        m = '0' + m;
     }
-    return DATE.getFullYear() + '年' + (DATE.getMonth()+1) + '月' + DATE.getDate() + '日，' + DATE.getHours() + ':' + m;
+    return DATE.getFullYear() + '年' + (DATE.getMonth() + 1) + '月' + DATE.getDate() + '日，' + DATE.getHours() + ':' + m;
 });
-juicer.register('formatAmount', function (str, type,fee) {
+juicer.register('formatAmount', function (str, type, fee) {
     var color = type ? 'red' : 'green';
-    if(fee)return '<p style="color:' + color + '">'+str+'&nbsp</p><p>|&nbsp服务费:'+fee+'</p>';
-    else return '<p style="color:' + color + '">'+str+'</p>';
+    if (fee)return '<p style="color:' + color + '">' + str + '&nbsp</p><p>|&nbsp服务费:' + fee + '</p>';
+    else return '<p style="color:' + color + '">' + str + '</p>';
 });
 juicer.register('formatBank', function (str) {
     return bank.bankList[str];
 });
-juicer.register('drawalMode', function (b,c) {
-    return bank.bankList[b] + '(尾号'+c.substr(-4)+')';
+juicer.register('drawalMode', function (b, c) {
+    return bank.bankList[b] + '(尾号' + c.substr(-4) + ')';
 });
 
-$(document).ready(function(){
+$(document).ready(function () {
 
     $('script.template').each(function () {
         var $this = $(this);
@@ -199,23 +199,21 @@ var page = {
                 success: function (obj) {
                     obj = $.parseJSON(obj);
                     console.dir(obj);
-                    //template.render('test',{content:al$print(obj.data)});
+                    template.render('test', {content: al$print(obj.data)});
 
                     if (!obj.code) {
                         var data = obj.data;
-                        //template.render('test',{content:'length:'+obj.data.length});
-                        //template.render('test',{content:al$print(obj.data)});
 
-                        if ((!data.length) && page.details.index == 0) {
-                            $('#details .tip').text('一条记录也没有呢');
-                            clearInterval(page.details.timer);
-                        } else {
-                            $('#details .tip').fadeOut(100);
-                            if (data.length < 6)clearInterval(page.details.timer);
-                            for (var i = 0; i < data.length; i++) {
-                                template.render('detailsRow', data[i]);
-                            }
-                        }
+                        //if ((!data.length) && page.details.index == 0) {
+                        //    $('#details .tip').text('一条记录也没有呢');
+                        //    clearInterval(page.details.timer);
+                        //} else {
+                        //    $('#details .tip').fadeOut(100);
+                        //    if (data.length < 6)clearInterval(page.details.timer);
+                        //    for (var i = 0; i < data.length; i++) {
+                        //        template.render('detailsRow', data[i]);
+                        //    }
+                        //}
                     } else {
                         layer.msg(obj.msg);
                     }
@@ -236,7 +234,7 @@ var page = {
             ex.jsonp({
                 url: g$url + 'User/login?_method=GET',
                 data: {
-                    _sid:g$sid
+                    _sid: g$sid
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
@@ -264,11 +262,11 @@ var page = {
         binding: function () {
             return tatoo.pushStack(ex.url('binding'));
         },
-        check:function(){
+        check: function () {
             ex.jsonp({
                 url: g$url + 'User/login?_method=GET',
                 data: {
-                    _sid:g$sid
+                    _sid: g$sid
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
@@ -336,6 +334,7 @@ var page = {
             ex.jsonp({
                 url: g$url + 'User/userInfo?_method=POST',
                 data: {
+                    _sid: g$sid,
                     bankcard: {
                         cardNum: cardNum,
                         name: name,
@@ -371,14 +370,15 @@ var page = {
 };
 
 
-al$print = function(obj){
-    function space(i){
-        if(i==1)return '&nbsp';
-        else{
-            return '&nbsp' + space(i-1);
+al$print = function (obj) {
+    function space(i) {
+        if (i == 1)return '&nbsp';
+        else {
+            return '&nbsp' + space(i - 1);
         }
     }
-    var str='';
+
+    var str = '';
     for (var i in obj) {
         str += space(1) + i + ': ' + obj[i] + '<br/>';
 
@@ -388,7 +388,7 @@ al$print = function(obj){
 
                 if (typeof obj[i][j] == 'object') {
                     for (var k in obj[i][j]) {
-                        str += space(10)+'└─&nbsp' + k + ': ' + obj[i][j][k] + '<br/>';
+                        str += space(10) + '└─&nbsp' + k + ': ' + obj[i][j][k] + '<br/>';
                     }
                     str += '<br>';
                 }
