@@ -1,5 +1,5 @@
-var g$url = 'http://api.meizhanggui.cc/Wenshen/V3.0.0/';
-//var g$url = 'http://123.57.42.13/Wenshen/V3.0.0/';
+var g$url = 'http://api.wenshendaka.com/V3.0.0/';
+//var g$url = 'http://api.dev.wenshendaka.com/V3.0.0/';
 var g$sid = '这是一个获取SessionId';//获取SessionId
 
 var UserInfo = {};
