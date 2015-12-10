@@ -1,6 +1,8 @@
+//var g$url = 'http://api.meizhanggui.cc/WenShen/V3.0.0/';
 var g$url = 'http://api.wenshendaka.com/V3.0.0/';
-//var g$url = 'http://api.dev.wenshendaka.com/V3.0.0/';
-var g$sid = '这是一个获取SessionId';//获取SessionId
+var g$sid = '';//获取SessionId
+var g$machineType = '';
+var g$platform = '';
 
 var UserInfo = {};
 
@@ -102,21 +104,29 @@ $(document).ready(function () {
         $this.remove();
     });
 
-    //tatoo.get('SessionId', function (obj) {
-    //    g$sid = obj.sessionId;
-
-    //template.render('test',{content:al$print(obj)});
-
-    routie({
-        "info": page.info.init,
-        "details": page.details.init,
-        "mycard": page.mycard.init,
-        "binding": page.binding.init,
-        "*": function () {
-            location.hash = '#info'
+    tatoo.get('SessionId', function (obj) {
+        if(navigator.userAgent.indexOf('Android') > -1){
+            g$sid = obj.sessionId;
+            g$machineType = obj.machineType;
+            g$platform = obj.platform;
+        }else{
+            g$sid = obj.SessionId.Value;
+            g$machineType = obj.SessionId.machineType;
+            g$platform = obj.SessionId.platform;
         }
+
+        //template.render('test',{content:al$print(g$sid)});
+
+        routie({
+            "info": page.info.init,
+            "details": page.details.init,
+            "mycard": page.mycard.init,
+            "binding": page.binding.init,
+            "*": function () {
+                location.hash = '#info'
+            }
+        });
     });
-    //});
 });
 
 
@@ -133,19 +143,22 @@ var page = {
             ex.jsonp({
                 url: g$url + 'User/income?_method=GET',
                 data: {
-                    //_sid: g$sid
-                    userId: 444044
+                    _sid: g$sid,
+                    machineType:g$machineType,
+                    platform:g$platform
+                    //userId: 444044
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
 
+                    //template.render('test',{content:al$print({url:g$url + 'User/income?_method=GET&_sid=' + JSON.stringify(g$sid),res:obj})});
                     if (!obj.code) {
 //---------------------------------------------------------------------
                         var data = obj.data;
                         console.dir(obj);
                         template.render('info', {
-                            accountAmount: data.waitDrawAmount + data.drawingAmount,
-                            unconfirmedAmount: data.unconfirmedAmount
+                            accountAmount: (data.waitDrawAmount + data.drawingAmount)||0,
+                            unconfirmedAmount: data.unconfirmedAmount||0
                         });
 
                         $('#info .row').each(function (index) {
@@ -195,7 +208,9 @@ var page = {
             ex.jsonp({
                 url: g$url + 'BillAccount/list?_method=GET',
                 data: {
-                    _sid: g$sid
+                    _sid: g$sid,
+                    machineType:g$machineType,
+                    platform:g$platform
                     //index: page.details.index,
                     //limit: 6
                 },
@@ -237,7 +252,9 @@ var page = {
             ex.jsonp({
                 url: g$url + 'User/login?_method=GET',
                 data: {
-                    _sid: g$sid
+                    _sid: g$sid,
+                    machineType:g$machineType,
+                    platform:g$platform
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
@@ -269,7 +286,9 @@ var page = {
             ex.jsonp({
                 url: g$url + 'User/login?_method=GET',
                 data: {
-                    _sid: g$sid
+                    _sid: g$sid,
+                    machineType:g$machineType,
+                    platform:g$platform
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
@@ -338,6 +357,8 @@ var page = {
                 url: g$url + 'User/userInfo?_method=POST',
                 data: {
                     _sid: g$sid,
+                    machineType:g$machineType,
+                    platform:g$platform,
                     bankcard: {
                         cardNum: cardNum,
                         name: name,
