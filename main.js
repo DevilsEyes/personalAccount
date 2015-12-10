@@ -102,21 +102,21 @@ $(document).ready(function () {
         $this.remove();
     });
 
-    tatoo.get('SessionId', function (obj) {
-        g$sid = obj.sessionId;
+    //tatoo.get('SessionId', function (obj) {
+    //    g$sid = obj.sessionId;
 
-        //template.render('test',{content:al$print(obj)});
+    //template.render('test',{content:al$print(obj)});
 
-        routie({
-            "info": page.info.init,
-            "details": page.details.init,
-            "mycard": page.mycard.init,
-            "binding": page.binding.init,
-            "*": function () {
-                location.hash = '#info'
-            }
-        });
+    routie({
+        "info": page.info.init,
+        "details": page.details.init,
+        "mycard": page.mycard.init,
+        "binding": page.binding.init,
+        "*": function () {
+            location.hash = '#info'
+        }
     });
+    //});
 });
 
 
@@ -133,8 +133,8 @@ var page = {
             ex.jsonp({
                 url: g$url + 'User/income?_method=GET',
                 data: {
-                    _sid: g$sid
-                    //userId: 444044
+                    //_sid: g$sid
+                    userId: 444044
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
