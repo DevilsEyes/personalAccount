@@ -40,9 +40,15 @@
 <script id="info" type="text/template" class="template">
     <!--<img src="imgs/icon-supposed.png" class="supposed"/>-->
     <div class="amount-board">
-        <h1>${accountAmount}</h1>
-
-        <p>账户余额(元)</p>
+        <div>
+            <p>等待服务(元)</p>
+            <h1>${unconfirmedAmount}</h1>
+            <p>完成服务后自动提现</p>
+        </div>
+        <div>
+            <p>提现中(元)</p>
+            <h1>${accountAmount}</h1>
+        </div>
     </div>
     <div>
         <div class="row">

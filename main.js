@@ -134,6 +134,7 @@ var page = {
                 url: g$url + 'User/income?_method=GET',
                 data: {
                     _sid: g$sid
+                    //userId: 444044
                 },
                 success: function (obj) {
                     obj = $.parseJSON(obj);
@@ -141,8 +142,10 @@ var page = {
                     if (!obj.code) {
 //---------------------------------------------------------------------
                         var data = obj.data;
+                        console.dir(obj);
                         template.render('info', {
-                            accountAmount: data.waitDrawAmount + data.drawingAmount
+                            accountAmount: data.waitDrawAmount + data.drawingAmount,
+                            unconfirmedAmount: data.unconfirmedAmount
                         });
 
                         $('#info .row').each(function (index) {

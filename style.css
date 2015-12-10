@@ -35,9 +35,20 @@
 #info .amount-board{
     background-color: rgb(255, 101, 0);
     width: 100%;
-    text-align: center;
+    text-align: left;
     padding: 40px 0;
     color: white;
+}
+
+#info .amount-board::after{
+    content: '';
+    display: block;
+    clear: both;
+}
+
+#info .amount-board>div{
+    padding:0 30px;
+    float: left;
 }
 
 #info .amount-board h1 {
