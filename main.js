@@ -217,21 +217,21 @@ var page = {
                 success: function (obj) {
                     obj = $.parseJSON(obj);
                     console.dir(obj);
-                    template.render('test', {content: al$print(obj.data)});
+                    //template.render('test', {content: al$print(obj.data)});
 
                     if (!obj.code) {
                         var data = obj.data;
 
-                        //if ((!data.length) && page.details.index == 0) {
-                        //    $('#details .tip').text('一条记录也没有呢');
-                        //    clearInterval(page.details.timer);
-                        //} else {
-                        //    $('#details .tip').fadeOut(100);
-                        //    if (data.length < 6)clearInterval(page.details.timer);
-                        //    for (var i = 0; i < data.length; i++) {
-                        //        template.render('detailsRow', data[i]);
-                        //    }
-                        //}
+                        if ((!data.length) && page.details.index == 0) {
+                            $('#details .tip').text('一条记录也没有呢');
+                            clearInterval(page.details.timer);
+                        } else {
+                            $('#details .tip').fadeOut(100);
+                            if (data.length < 6)clearInterval(page.details.timer);
+                            for (var i = 0; i < data.length; i++) {
+                                template.render('detailsRow', data[i]);
+                            }
+                        }
                     } else {
                         layer.msg(obj.msg);
                     }
@@ -267,7 +267,6 @@ var page = {
                             $('#loading').hide();
                             template.render('mycard', UserInfo.bankcard);
                             $('#mycard .row').click(page.mycard.binding);
-
                         }
                         else {
                             return tatoo.pushStack(ex.url('binding'));
